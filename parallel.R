@@ -23,7 +23,7 @@ struct_grocery <- function(nstart) {
 
 struct_grocery()
 
-starts <- rep(100, 40)
+starts <- rep(1, 5) #100, 40
 # fx <- function(nstart) kmeans(Boston, 4, nstart=nstart)
 # numCores <- detectCores()
 # numCores
