@@ -28,7 +28,7 @@ df <- function(i){
 df
 
 #sequential processing
-seq <- lapply(100, df)
+seq <- lapply(1:50, df)
 
 #parallel processing using sockets
 cl <- makeCluster(numCores)
@@ -38,11 +38,11 @@ clusterEvalQ(cl, {
   library(data.table)
   library(lme4)
 })
-par <- parLapply(cl, 100, df)
+par <- parLapply(cl, 1:50, df)
 stopCluster(cl)
 
 #compare both functions performance using microbenchmark
-mbm <- microbenchmark("Sequential Processing" = seq, "Parallel Processing" = par, times=100)
+mbm <- microbenchmark("Sequential Processing" = seq, "Parallel Processing" = par, times=100, unit="us")
 mbm
 
 #plot the microbenchmark results
@@ -53,8 +53,8 @@ autoplot(mbm) + ggtitle("Autoplot of parallel and sequential processing time") +
   theme(plot.title = element_text(size=14, face="bold.italic"))
 
 #bar chart
-df <- data.frame(mbm)
-p <- ggplot(data=df, aes(x=expr, y=time, fill=expr), legend.title="Dose (mg)") + geom_bar(stat="identity") +
+df_result <- data.frame(mbm)
+p <- ggplot(data=df_result, aes(x=expr, y=time, fill=expr), legend.title="Dose (mg)") + geom_bar(stat="identity") +
   labs(title="Plot of Time by Processing Type", x ="Processing Type", 
        y = "Time (nanoseconds)", fill="Processing Type") +
   theme(plot.title = element_text(size=14, face="bold.italic"))
