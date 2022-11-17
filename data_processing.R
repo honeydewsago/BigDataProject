@@ -1,17 +1,23 @@
-install.packages("tidyverse")
+#install required packages
+install.packages("parallel")
 install.packages("microbenchmark")
+install.packages("dplyr")
+install.packages("tidyverse")
+install.packages("data.table")
 
-
+#load packages
 library(parallel)
 library(microbenchmark)
-library(dplyr)
 
+#detect available physical and logical processors
 numCores <- detectCores() 
 detectCores(logical = FALSE)
 
+#set working directory
 setwd("C:/Sem6/5011CEM BigData/BigDataProject/datasets/")
 
-#read files using data.table package
+#function to read a list of dataset files
+library(dplyr)
 library(tidyverse)
 library(data.table)
 
@@ -22,19 +28,9 @@ df <- function(i){
 df
 
 #sequential processing
-#method 1
-system.time(lapply(1:5, df))
+seq <- lapply(100, df)
 
-#method 2
-starttime <- Sys.time()
-lapply(1:2, df)
-endtime <- Sys.time()
-duration <- endtime - starttime
-duration
-
-
-#parallel processing
-#using sockets
+#parallel processing using sockets
 cl <- makeCluster(numCores)
 clusterEvalQ(cl, {
   library(dplyr)
@@ -42,27 +38,24 @@ clusterEvalQ(cl, {
   library(data.table)
   library(lme4)
 })
-system.time(parLapply(cl, 1:5, df))
+par <- parLapply(cl, 100, df)
 stopCluster(cl)
 
-#microbenchmark
-cl <- makeCluster(numCores)
-clusterEvalQ(cl, {
-  library(dplyr)
-  library(tidyverse)
-  library(data.table)
-  library(lme4)
-})
-
-seq <- lapply(1:10, df)
-par <- parLapply(cl, 1:10, df)
-
-mbm <- microbenchmark(seq, par, times=1)
+#compare both functions performance using microbenchmark
+mbm <- microbenchmark("Sequential Processing" = seq, "Parallel Processing" = par, times=100)
 mbm
-stopCluster(cl)
 
-#autoplot(mbm)
+#plot the microbenchmark results
+library(ggplot2)
 
+#box plot 
+autoplot(mbm) + ggtitle("Autoplot of parallel and sequential processing time") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+#bar chart
 df <- data.frame(mbm)
-p <- ggplot(data=df, aes(x=expr, y=time)) + geom_bar(stat="identity")
+p <- ggplot(data=df, aes(x=expr, y=time, fill=expr), legend.title="Dose (mg)") + geom_bar(stat="identity") +
+  labs(title="Plot of Time by Processing Type", x ="Processing Type", 
+       y = "Time (nanoseconds)", fill="Processing Type") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 p
