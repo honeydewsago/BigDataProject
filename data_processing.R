@@ -9,7 +9,7 @@ install.packages("data.table")
 library(parallel)
 library(microbenchmark)
 
-#detect available physical and logical processors
+#detect available physical and logical processors cores
 numCores <- detectCores() 
 detectCores(logical = FALSE)
 
