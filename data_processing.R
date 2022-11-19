@@ -59,3 +59,29 @@ p <- ggplot(data=df_result, aes(x=expr, y=time, fill=expr), legend.title="Dose (
        y = "Time (nanoseconds)", fill="Processing Type") +
   theme(plot.title = element_text(size=14, face="bold.italic"))
 p
+
+
+#extra comparison - method 2
+#sequential processing
+seq_start <- Sys.time()
+lapply(1:50, df)
+seq_end <- Sys.time()
+seq_duration <- seq_end - seq_start
+seq_duration
+
+#parallel processing
+c2 <- makeCluster(numCores)
+clusterEvalQ(c2, {
+  library(dplyr)
+  library(tidyverse)
+  library(data.table)
+  library(lme4)
+})
+
+par_start <- Sys.time()
+parLapply(c2, 1:50, df)
+par_end <- Sys.time()
+par_duration <- par_end - par_start
+par_duration
+
+stopCluster(c2)
