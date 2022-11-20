@@ -93,17 +93,26 @@ cor.test(formula = ~ num_transactions + female, data = gender_trans,
 
 #create scatterplot matrix
 ggpairs(gender_trans, columns = c( "male","female", "num_transactions"), 
-        title = "Scatterplot of transactions number and populataion gender(Borough Area)", 
+        title = "Scatterplot of Transactions Number and Population Gender(Borough Area)", 
         upper = list(continuous = wrap("cor",size = 3)),
-        lower = list(continuous = wrap("smooth",alpha = 1,size = 1,color = "blue")))
+        lower = list(continuous = wrap("smooth",alpha = 1,size = 1,color = "darkcyan")))
 
-#create scatterplot with fitted regression line
-ggplot(gender_trans, aes(x = male, y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
-ggplot(gender_trans, aes(x = female, y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
+#scatterplot for the correlation pairs
+ggscatter(gender_trans, x = "male", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Male", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Male and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggscatter(gender_trans, x = "female", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Female", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Female and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 
 #hypothesis test
 #calculate p-value
@@ -173,8 +182,14 @@ hist(age_trans$age_65.,
 abline(v = mean(age_trans$age_65.), col = 'red', lty = 2)
 
 #correlation test
-model <- select(age_trans, 'num_transactions', 'age_0_17', 'age_18_64', 'age_65.', 'avg_age')
-mosthighlycorrelated(model, 20)
+model2 <- select(age_trans, 'num_transactions', 'age_0_17', 'age_18_64', 'age_65.', 'avg_age')
+mosthighlycorrelated(model2, 20)
+
+#create scatterplot matrix
+ggpairs(age_trans, columns = c( "age_0_17","age_18_64", "age_65.", "avg_age","num_transactions"), 
+        title = "Scatterplot of Transactions Number and Population Age Group(Borough Area)", 
+        upper = list(continuous = wrap("cor",size = 3)),
+        lower = list(continuous = wrap("smooth",alpha = 1,size = 1,color = "darkcyan")))
 
 #calculate correlation value
 cor.test(formula = ~ num_transactions + age_0_17, data = age_trans,
@@ -186,26 +201,38 @@ cor.test(formula = ~ num_transactions + age_65., data = age_trans,
 cor.test(formula = ~ num_transactions + avg_age, data = age_trans,
          method = "pearson", use = "complete.obs")
 
-#create scatterplot matrix
-ggpairs(age_trans, columns = c( "age_0_17","age_18_64", "age_65.", "avg_age","num_transactions"), 
-        title = "Scatterplot of transactions number and population age(Borough Area)", 
-        upper = list(continuous = wrap("cor",size = 3)),
-        lower = list(continuous = wrap("smooth",alpha = 1,size = 1,color = "blue")))
+#scatterplot for the correlation pairs
+ggscatter(age_trans, x = "avg_age", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Average Age", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Average Age and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 
-#create scatterplot with fitted regression line
-ggplot(age_trans, aes(x = age_0_17, y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
-ggplot(age_trans, aes(x = age_18_64, y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
-ggplot(age_trans, aes(x = age_65., y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
-ggplot(age_trans, aes(x = avg_age, y = num_transactions)) +
-  geom_point() +
-  stat_smooth(method = "lm")
+ggscatter(age_trans, x = "age_0_17", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Age Group 0 to 17", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Age Group 0 to 17 and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 
+ggscatter(age_trans, x = "age_18_64", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Age Group 18 to 64", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Age Group 18 to 64 and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggscatter(age_trans, x = "age_65.", y = "num_transactions", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Age Group 65 and Above", ylab = "Number of Transactions",
+          add.params = list(color = "blue", fill = "lightgrey")) +
+  ggtitle("Scatterplot of Age Group 65 and Above and Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 
 #hypothesis test
 #calculate p-value
