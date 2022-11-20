@@ -116,13 +116,30 @@ ggscatter(gender_trans, x = "female", y = "num_transactions",
 
 #hypothesis test
 #calculate p-value
-model<- lm(num_transactions ~ male, data = gender_trans)
-summary(model)
-model<- lm(num_transactions ~ female, data = gender_trans)
-summary(model)
+model_male <- lm(num_transactions ~ male, data = gender_trans)
+summary(model_male)
+model_female <- lm(num_transactions ~ female, data = gender_trans)
+summary(model_female)
 
-#plot ?
-plot(model)
+#regression 
+#plot with fitted regression line
+ggplot(gender_trans, aes(x=male, y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Male over Number of Transactions",
+       x = "Male", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggplot(gender_trans, aes(x=female, y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Female over Number of Transactions",
+       x = "Female", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
 
 
 
@@ -236,14 +253,49 @@ ggscatter(age_trans, x = "age_65.", y = "num_transactions",
 
 #hypothesis test
 #calculate p-value
-model<- lm(num_transactions ~ age_0_17, data = age_trans)
-summary(model)
-model<- lm(num_transactions ~ age_18_64, data = age_trans)
-summary(model)
-model<- lm(num_transactions ~ age_65., data = age_trans)
-summary(model)
-model<- lm(num_transactions ~ avg_age, data = age_trans)
-summary(model)
+model_age<- lm(num_transactions ~ avg_age, data = age_trans)
+summary(model_age)
+model_age2 <- lm(num_transactions ~ age_0_17, data = age_trans)
+summary(model_age2)
+model_age3 <- lm(num_transactions ~ age_18_64, data = age_trans)
+summary(model_age3)
+model_age4<- lm(num_transactions ~ age_65., data = age_trans)
+summary(model_age4)
 
-#plot ?
-plot(model)
+#regression 
+#plot with fitted regression line
+ggplot(age_trans, aes(x=avg_age, y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Average Age over Number of Transactions",
+       x = "Average Age", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggplot(age_trans, aes(x=age_0_17, y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Age Group 0 to 17 over Number of Transactions",
+       x = "Age Group 0 to 17", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggplot(age_trans, aes(x=age_18_64, y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Age Group 18 to 64 over Number of Transactions",
+       x = "Age Group 18 to 64", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
+
+ggplot(age_trans, aes(x=age_65., y=num_transactions)) +
+  geom_point() +
+  stat_smooth(method = "lm",  col = "red", fill = "yellowgreen") +
+  stat_regline_equation() +
+  theme_bw() + 
+  labs(title = "Regression of Age Group 65 and Above over Number of Transactions",
+       x = "Age Group 65 and Above", y = "Number of Transactions") +
+  theme(plot.title = element_text(size=14, face="bold.italic"))
