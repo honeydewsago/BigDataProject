@@ -1,6 +1,12 @@
+#install required packages
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("ggpubr")
 install.packages("GGally")
+install.packages("car")
 install.packages("pastecs")
 
+#load packages
 library(ggplot2)
 library(dplyr)
 library(ggpubr)
@@ -8,8 +14,7 @@ library(GGally)
 library(car)
 library(pastecs)
 
-
-#objective 1
+#Objective 1 - To find the relationship between number of transaction and population gender in Borough area
 #gender transaction data
 gender_trans <-read.csv("C:/Sem6/5011CEM BigData/BigDataProject/gender_transactions.csv")
 View(gender_trans)
@@ -61,9 +66,6 @@ hist(gender_trans$population,
      col="wheat")
 abline(v = mean(gender_trans$population), col = 'red', lty = 2)
 
-#box plot
-#boxplot(gender_trans$num_transactions)
-#df <- data.frame()
 
 #correlation test
 mosthighlycorrelated <- function(mydataframe,numtoreport)
@@ -81,7 +83,7 @@ mosthighlycorrelated <- function(mydataframe,numtoreport)
   # sort and print the top n correlations
   head(fm[order(abs(fm$Correlation),decreasing=T),],n=numtoreport)
 }
-
+#find most correlated pairs
 model <- select(gender_trans, 'num_transactions', 'male', 'female')
 mosthighlycorrelated(model, 20)
 
@@ -114,6 +116,7 @@ ggscatter(gender_trans, x = "female", y = "num_transactions",
   ggtitle("Scatterplot of Female and Number of Transactions") +
   theme(plot.title = element_text(size=14, face="bold.italic"))
 
+
 #hypothesis test
 #calculate p-value
 model_male <- lm(num_transactions ~ male, data = gender_trans)
@@ -143,7 +146,7 @@ ggplot(gender_trans, aes(x=female, y=num_transactions)) +
 
 
 
-#objective 2
+#Objective 2 - To find the relationship between number of transaction and population age group in Borough area
 #age group transaction data
 age_trans <-read.csv("C:/Sem6/5011CEM BigData/BigDataProject/age_group_transactions.csv")
 View(age_trans)
@@ -199,6 +202,7 @@ hist(age_trans$age_65.,
 abline(v = mean(age_trans$age_65.), col = 'red', lty = 2)
 
 #correlation test
+#find most correlated pairs
 model2 <- select(age_trans, 'num_transactions', 'age_0_17', 'age_18_64', 'age_65.', 'avg_age')
 mosthighlycorrelated(model2, 20)
 
@@ -299,3 +303,4 @@ ggplot(age_trans, aes(x=age_65., y=num_transactions)) +
   labs(title = "Regression of Age Group 65 and Above over Number of Transactions",
        x = "Age Group 65 and Above", y = "Number of Transactions") +
   theme(plot.title = element_text(size=14, face="bold.italic"))
+

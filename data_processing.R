@@ -31,14 +31,18 @@ df
 seq <- lapply(1:50, df)
 
 #parallel processing using sockets
+#create clusters for each cores
 cl <- makeCluster(numCores)
+#add libraries to each clusters
 clusterEvalQ(cl, {
   library(dplyr)
   library(tidyverse)
   library(data.table)
   library(lme4)
 })
+#run parallel processing
 par <- parLapply(cl, 1:50, df)
+#close cluster
 stopCluster(cl)
 
 #compare both functions performance using microbenchmark
@@ -63,14 +67,21 @@ p
 
 #extra comparison - method 2
 #sequential processing
+#record starting time
 seq_start <- Sys.time()
+#perform sequential processing
 lapply(1:50, df)
+#record ending time
 seq_end <- Sys.time()
+
+#calculate time duration
 seq_duration <- seq_end - seq_start
 seq_duration
 
 #parallel processing
+#create clusters for each cores
 c2 <- makeCluster(numCores)
+#add libraries to each clusters
 clusterEvalQ(c2, {
   library(dplyr)
   library(tidyverse)
@@ -78,10 +89,16 @@ clusterEvalQ(c2, {
   library(lme4)
 })
 
+#record starting time
 par_start <- Sys.time()
+#run parallel processing
 parLapply(c2, 1:50, df)
+#record ending time
 par_end <- Sys.time()
+
+#calculate time duration
 par_duration <- par_end - par_start
 par_duration
 
+#close cluster
 stopCluster(c2)
